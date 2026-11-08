@@ -3,6 +3,8 @@
 Application web Flask qui vérifie si une adresse IP appartient à AWS, à partir des plages publiées par AWS
 ([ip-ranges.json](https://ip-ranges.amazonaws.com/ip-ranges.json)).
 
+![Aperçu de l'application](docs/screenshot.png)
+
 ## Fonctionnalités
 
 1. **Vérifier une IP** : indique si l'IP est AWS et, si oui, affiche pour chaque plage la région, le service,
