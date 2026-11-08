@@ -95,3 +95,10 @@ def test_check_list_ip_invalide(client):
     r = client.post("/api/check-list", json={"ips": ["3.5.140.10", "zz"]})
     assert r.status_code == 400
     assert "zz" in r.get_json()["error"]
+
+# ---------- GET / ----------
+
+def test_page_accueil(client):
+    r = client.get("/")
+    assert r.status_code == 200
+    assert b"AWS IP Checker" in r.data

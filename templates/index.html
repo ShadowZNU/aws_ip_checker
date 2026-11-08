@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AWS IP Checker</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <h1>AWS IP Checker</h1>
+    <p>Vérifiez si une adresse IP appartient à AWS.</p>
+  </header>
+
+  <main>
+    <!-- Feature 1 : une IP -->
+    <section class="card">
+      <h2>Vérifier une IP</h2>
+      <form id="lookup-form">
+        <input id="lookup-ip" type="text" placeholder="ex. 3.5.140.10" required>
+        <button type="submit">Vérifier</button>
+      </form>
+      <div id="lookup-result" class="result"></div>
+    </section>
+
+    <!-- Feature 2 : liste d'IPs -->
+    <section class="card">
+      <h2>Vérifier une liste d'IPs</h2>
+      <form id="list-form">
+        <textarea id="list-ips" rows="5"
+                  placeholder="Une IP par ligne (ou séparées par des virgules / espaces)" required></textarea>
+        <button type="submit">Vérifier la liste</button>
+      </form>
+      <div id="list-result" class="result"></div>
+    </section>
+  </main>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
