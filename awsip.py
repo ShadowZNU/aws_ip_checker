@@ -2,10 +2,12 @@ import urllib.request
 import json
 import ipaddress
 import sys
+from functools import lru_cache
 
 
+@lru_cache(maxsize=1)
 def download_aws_ip_set():
-    """Downloads the AWS IP range JSON file and returns it as a dictionary."""
+    """Downloads the AWS IP range JSON file (once, then cached)."""
 
     # URL of the AWS IP range JSON file
     aws_ip_range_url = "https://ip-ranges.amazonaws.com/ip-ranges.json"
@@ -18,17 +20,19 @@ def download_aws_ip_set():
 
 
 def find_aws_ip(aws_ip_range_data, ip_to_find):
-    """Finds the AWS IP range that contains the given IP address."""
+    """Finds the AWS IP ranges that contain the given IP address."""
+    ip = ipaddress.ip_address(ip_to_find)
     prefixes = []
     for prefix in aws_ip_range_data:
         network = ipaddress.ip_network(prefix["ip_prefix"])
-        if ipaddress.ip_address(ip_to_find) in network:
-            prefix["number_of_IP"] = (
+        if ip in network:
+            result = dict(prefix)  # copie : on ne modifie pas les données en cache
+            result["number_of_IP"] = (
                 2 ** (32 - int(prefix["ip_prefix"].split("/")[1])) - 2
             )
-            prefix["first_network_address"] = str(network.network_address + 1)
-            prefix["last_network_address"] = str(network.broadcast_address - 1)
-            prefixes.append(prefix)
+            result["first_network_address"] = str(network.network_address + 1)
+            result["last_network_address"] = str(network.broadcast_address - 1)
+            prefixes.append(result)
     return prefixes
 
 

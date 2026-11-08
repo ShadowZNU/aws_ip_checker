@@ -1,18 +1,7 @@
 [project]
-name = "aws-ip-checker"
+name = "does-this-ip-belong-to-aws"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-authors = [
-    { name = "ShadowZNU", email = "zounmenoushalom@gmail.com" }
-    { name = "cedric20061", email = "cedricguidi735@gmail.com" }
-]
 requires-python = ">=3.14"
 dependencies = []
-
-[project.scripts]
-aws-ip-checker = "aws_ip_checker:main"
-
-[build-system]
-requires = ["uv_build>=0.13.7,<0.14.0"]
-build-backend = "uv_build"
