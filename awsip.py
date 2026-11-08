@@ -36,4 +36,34 @@ def find_aws_ip(aws_ip_range_data, ip_to_find):
     return prefixes
 
 
-sys.stdout.write(json.dumps(find_aws_ip(download_aws_ip_set(), sys.argv[1]), indent=2))
+def check_ip_list(aws_ip_range_data, ips):
+    """Checks if all IPs are AWS IPs and if they share a common AWS range."""
+    results = []
+    common = None
+    for ip in ips:
+        ranges = find_aws_ip(aws_ip_range_data, ip)
+        results.append({"ip": ip, "is_aws": bool(ranges)})
+        cidrs = {r["ip_prefix"] for r in ranges}
+        common = cidrs if common is None else common & cidrs
+
+    return {
+        "results": results,
+        "all_aws": all(r["is_aws"] for r in results),
+        "same_network": bool(common),
+        "common_ranges": sorted(common),
+    }
+
+
+if __name__ == "__main__":
+    # python awsip.py <ip>              -> plages AWS de l'IP
+    # python awsip.py <ip1> <ip2> ...   -> vérification de la liste
+    ips = sys.argv[1:]
+    if not ips:
+        sys.exit("Usage : python awsip.py <ip> [<ip> ...]")
+
+    if len(ips) == 1:
+        output = find_aws_ip(download_aws_ip_set(), ips[0])
+    else:
+        output = check_ip_list(download_aws_ip_set(), ips)
+
+    sys.stdout.write(json.dumps(output, indent=2))
